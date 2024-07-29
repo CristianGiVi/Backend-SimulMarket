@@ -11,19 +11,35 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "shopping_list_products")
 public class ShoppingListProducts {
 
+    // Identificador único del producto. Se genera automáticamente de manera incremental
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Relación muchos a uno con la entidad `ShoppingList`.
+     *
+     * Cada producto en la lista de compras está asociado a una lista de compras específica.
+     * La anotación `@JsonProperty` asegura que esta relación no sea serializada al convertir a JSON.
+     */
     @ManyToOne
     @JoinColumn(name = "shopping_list_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ShoppingList shoppingList;
 
+    /**
+     * Relación muchos a uno con la entidad `Product`.
+     *
+     * Cada entrada en la lista de compras está asociada a un producto específico.
+     */
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+    /**
+     * Cantidad del producto en la lista de compras.
+     * No puede ser nulo y debe ser al menos 1.
+     */
     @NotNull
     @Min(1)
     private Integer quantity;

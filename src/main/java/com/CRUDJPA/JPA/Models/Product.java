@@ -10,18 +10,22 @@ import jakarta.validation.constraints.Size;
 @Table(name = "product")
 public class Product {
 
+    // Identificador único del producto. Se genera automáticamente de manera incremental
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Nombre del producto. No puede estar en blanco y debe tener al menos 5 caracteres.
     @NotBlank
     @Size(min = 5)
     private String name;
 
+    // Precio del producto. No puede ser nulo y debe ser al menos 500.
     @NotNull
     @Min(500)
     private Integer price;
 
+    // Descripción del producto. No puede estar en blanco.
     @NotBlank
     private String description;
 

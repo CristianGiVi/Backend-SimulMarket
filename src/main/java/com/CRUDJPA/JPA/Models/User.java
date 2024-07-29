@@ -10,18 +10,27 @@ import java.util.List;
 @Table(name = "user")
 public class User {
 
+    // Identificador único de cada usuario, generado automáticamente de forma ascendente.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Nombre de usuario, debe ser único y no puede estar en blanco.
     @NotBlank
     @Column(unique = true, name = "user_name")
     private String userName;
 
+    // Contraseña del usuario, no puede estar en blanco y no se serializa en la salida JSON.
     @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    /**
+     * Lista de roles que tiene el usuario. Relación muchos a muchos con la entidad `Role`.
+     *
+     * La tabla de unión es `user_x_role`.
+     * La anotación `@JsonProperty` asegura que esta lista no sea serializada al convertir a JSON.
+     */
     @ManyToMany
     @JoinTable(name = "user_x_role",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -32,10 +41,12 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Role> roles;
 
+    // Campo transitorio (no se almacena en la base de datos), indica si el usuario es administrador.
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean admin;
 
+    // Indica si el usuario está habilitado o no.
     private Boolean enable;
 
     public User() {
